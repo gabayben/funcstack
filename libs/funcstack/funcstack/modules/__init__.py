@@ -3,4 +3,4 @@ from .sequential import Sequential
 from .parallel import Parallel
 from .decorator import DecoratorBase, Decorator
 from .fault_handling import *
-from .mapping import *
+from .passthrough import *

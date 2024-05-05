@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "funcstack-monorepo"
+version = "0.1.0"
+description = ""
+authors = ["bengabay <ben@netop.cloud>"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+[tool.poetry.group.dev.dependencies]
+funcstack = { path = "libs/funcstack/", develop = true }
+funcflow = { path = "libs/funcflow/", develop = true }
+funcstack-jina = { path = "libs/integrations/jina/", develop = true }
+notebook = "^7.1.3"
+
+[tool.poetry.group.lint.dependencies]
+funcstack = { path = "libs/funcstack/", develop = true }
+funcflow = { path = "libs/funcflow/", develop = true }
+funcstack-jina = { path = "libs/integrations/jina/", develop = true }

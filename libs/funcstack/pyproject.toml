@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "funcstack"
+version = "0.1.0"
+description = ""
+authors = ["bengabay <ben@netop.cloud>"]
+packages = [{ include = "funcstack" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pydantic = "^2.7.1"
+docarray = "^0.40.0"
+tenacity = "^8.2.3"
+returns = "^0.22.0"
+unsync = "^1.4.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

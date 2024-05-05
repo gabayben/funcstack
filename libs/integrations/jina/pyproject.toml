@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "funcstack-jina"
+version = "0.1.0"
+description = ""
+authors = ["bengabay <ben@netop.cloud>"]
+packages = [{ include = "funcstack_jina" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+funcstack = { path = "../../funcstack" }
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

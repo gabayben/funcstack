@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "funcflow"
+version = "0.1.0"
+description = ""
+authors = ["bengabay <ben@netop.cloud>"]
+packages = [{ include = "funcflow" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+funcstack = { path = "../funcstack/" }
+networkx = "^3.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

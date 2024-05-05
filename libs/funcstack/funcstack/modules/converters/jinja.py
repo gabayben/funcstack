@@ -9,13 +9,26 @@ from funcstack.typing._vars import Out
 from funcstack.utils.serialization import create_model
 
 class JinjaConverter(PydanticMixin, Module[dict[str, Any], Out]):
+    template: str
+    output_type: Type[Out]
+    runtime_variables: dict[str, Any]
+
+    @property
+    @override
+    def OutputType(self) -> Type[Out]:
+        return self.output_type
+
     def __init__(
         self,
         template: str,
+        output_type: Type[Out],
         **runtime_variables
     ):
-        self.template = template
-        self.runtime_variables = runtime_variables
+        super().__init__(
+            template=template,
+            output_type=output_type,
+            runtime_variables=runtime_variables
+        )
 
     def evaluate(self, context: dict[str, Any], **kwargs) -> Effect[Out]:
         pass

@@ -150,9 +150,12 @@ class Module(Generic[In, Out], ABC):
         root_type = self.InputType
         if inspect.isclass(root_type) and issubclass(root_type, BaseModel):
             return root_type
+        print(self.InputType)
         return create_model(
-            self.get_name('Input'),
-            __root__=(root_type, None)
+            self.get_name(suffix='Input'),
+            **{
+                'input': (self.InputType, None)
+            }
         )
 
     def output_schema(self) -> Type[BaseModel]:
@@ -172,8 +175,10 @@ class Module(Generic[In, Out], ABC):
         if inspect.isclass(root_type) and issubclass(root_type, BaseModel):
             return root_type
         return create_model(
-            self.get_name('Output'),
-            __root__=(root_type, None)
+            self.get_name(suffix='Output'),
+            **{
+                'output': (self.OutputType, None)
+            }
         )
 
 class Modules:

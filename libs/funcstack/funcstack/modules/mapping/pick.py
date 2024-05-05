@@ -4,6 +4,7 @@ from typing import Type, override
 from pydantic import BaseModel
 
 from funcstack.containers import Effect, Effects
+from funcstack.mixins import PydanticMixin
 from funcstack.modules import Module
 from funcstack.modules.traits import HasSequentialSchema
 from funcstack.typing import SupportsKeyIndex
@@ -11,7 +12,7 @@ from funcstack.typing._vars import Out
 
 logger = logging.getLogger(__name__)
 
-class Pick(Module[SupportsKeyIndex, Out], HasSequentialSchema):
+class Pick(PydanticMixin, Module[SupportsKeyIndex, Out], HasSequentialSchema):
     key: str
 
     def __init__(self, key: str, **kwargs):

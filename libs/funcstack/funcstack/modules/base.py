@@ -3,6 +3,7 @@ import asyncio
 import inspect
 from typing import Any, AsyncIterator, Callable, Coroutine, Generic, Iterator, Mapping, Sequence, Type, Union, cast, final, get_args
 
+from overrides import typing_utils
 from pydantic import BaseModel
 
 from funcstack.containers import Effect, Effects
@@ -19,6 +20,7 @@ class Module(Generic[In, Out], ABC):
         """
         The type of input this module accepts specified as a type annotation.
         """
+        args = get_args(self.__class__)
         for cls in self.__class__.__orig_bases__: # type: ignore[attr-defined]
             type_args = get_args(cls)
             if type_args and len(type_args) == 2:
@@ -150,11 +152,10 @@ class Module(Generic[In, Out], ABC):
         root_type = self.InputType
         if inspect.isclass(root_type) and issubclass(root_type, BaseModel):
             return root_type
-        print(self.InputType)
         return create_model(
-            self.get_name(suffix='Input'),
+            self.get_name(name='Input'),
             **{
-                'input': (self.InputType, None)
+                'input': (root_type, None)
             }
         )
 
@@ -175,9 +176,9 @@ class Module(Generic[In, Out], ABC):
         if inspect.isclass(root_type) and issubclass(root_type, BaseModel):
             return root_type
         return create_model(
-            self.get_name(suffix='Output'),
+            self.get_name(name='Output'),
             **{
-                'output': (self.OutputType, None)
+                'output': (root_type, None)
             }
         )
 

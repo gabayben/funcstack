@@ -13,14 +13,22 @@ class Artifact(BaseDoc, ABC):
     @classmethod
     def from_source(cls, source: 'ArtifactSource') -> Self:
         if isinstance(source, Artifact):
-            return cls.from_bytes(bytes(source))
+            return cls.from_artifact(source)
         elif isinstance(source, BaseUrl):
             return cls.from_url(source)
         return cls.from_path(source)
 
     @classmethod
+    def from_artifact(cls, other: 'Artifact') -> Self:
+        artifact = cls.from_bytes(bytes(other))
+        artifact.metadata.update(other.metadata)
+        return artifact
+
+    @classmethod
     def from_url(cls, url: BaseUrl) -> Self:
-        return cls.from_bytes(url.load_bytes())
+        artifact = cls.from_bytes(url.load_bytes())
+        artifact.metadata['url'] = url
+        return artifact
 
     @classmethod
     def from_path(cls, path: str | Path) -> Self:
@@ -37,7 +45,7 @@ class Artifact(BaseDoc, ABC):
         return bytes(self) == b''
 
     class Config:
-        extra = True
+        extra = 'allow'
         arbitrary_types_allowed = True
 
 ArtifactSource = str | Path | BaseUrl | Artifact

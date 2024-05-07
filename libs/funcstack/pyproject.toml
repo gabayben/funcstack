@@ -7,6 +7,7 @@ packages = [{ include = "funcstack" }]
 
 [tool.poetry.dependencies]
 python = "^3.12"
+lazy-imports = "0.3.1"
 pydantic = "^2.7.1"
 docarray = { version = "^0.40.0", extras = ['proto'] }
 tenacity = "^8.2.3"

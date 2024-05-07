@@ -58,7 +58,7 @@ class HtmlToText(PydanticMixin, Module[list[ArtifactSource], list[TextArtifact]]
 
             for source, md in zip2(sources, metadata_list):
                 try:
-                    bytestream = ByteStream.from_source(source)
+                    bytestream = ByteStream.from_source(source, md)
                 except Exception as e:
                     logger.warning(f'Could not read {source}. Skipping it. Error: {e}.')
                     continue
@@ -75,7 +75,7 @@ class HtmlToText(PydanticMixin, Module[list[ArtifactSource], list[TextArtifact]]
                 if not text:
                     logger.warning(f'Failed to extract text using extractors {extractors_list}. Skipping it.')
                     continue
-                results.append(TextArtifact(text, metadata={**bytestream.metadata, **md}))
+                results.append(TextArtifact(text, metadata=bytestream.metadata))
 
             return results
 

@@ -43,3 +43,4 @@ Embedding = ndarray
 RetryStrategy = tenacity.retry_base | typing.Callable[[tenacity.RetryCallState], bool]
 StopStrategy = tenacity.stop.stop_base | typing.Callable[[tenacity.RetryCallState], bool]
 WaitStrategy = tenacity.wait.wait_base | typing.Callable[[tenacity.RetryCallState], int | float]
+AfterRetryFailure = typing.Callable[[tenacity.RetryCallState], None]

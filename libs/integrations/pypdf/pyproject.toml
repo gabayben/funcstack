@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "funcstack-pypdf"
+version = "0.1.0"
+description = ""
+authors = ["bengabay <ben@netop.cloud>"]
+packages = [{ include = "funcstack_pypdf" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pypdf = "4.2.0"
+funcstack = { path = "../../funcstack/" }
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

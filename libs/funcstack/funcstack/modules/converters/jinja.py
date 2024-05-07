@@ -1,21 +1,16 @@
-from typing import Any, Type, override
+from typing import Any, Type, cast, override
 
+from jinja2 import Template, meta
 from pydantic import Field
 
-from funcstack.containers import Effect
+from funcstack.containers import Effect, Effects
 from funcstack.mixins import PydanticMixin
 from funcstack.modules import Module
-from funcstack.typing._vars import In, Out
+from funcstack.typing._vars import Out
 
-class JinjaConverter(PydanticMixin, Module[In, Out]):
-    template: str
-    input_type: Type[In] = Field(default=Any)
+class JinjaConverter(PydanticMixin, Module[Any, Out]):
+    template_str: str
     output_type: Type[Out] = Field(default=Any)
-
-    @property
-    @override
-    def InputType(self) -> Type[In]:
-        return self.input_type
 
     @property
     @override
@@ -25,10 +20,15 @@ class JinjaConverter(PydanticMixin, Module[In, Out]):
     def __init__(
         self,
         template: str,
-        input_type: Type[In] = Any,
         output_type: Type[Out] = Any
     ):
-        super().__init__(template=template, input_type=input_type, output_type=output_type)
+        super().__init__(template_str=template, output_type=output_type)
+        self.template = Template(template)
+        ast = self.template.environment.parse(template)
+        template_variables = meta.find_undeclared_variables(ast)
+        self.context_variables = {v: (Any, None) for v in template_variables}
 
-    def evaluate(self, context: In, **kwargs) -> Effect[Out]:
-        pass
+    def evaluate(self, context: Any, **kwargs) -> Effect[Out]:
+        def _invoke() -> Out:
+            return cast(Out, self.template.render(context))
+        return Effects.Sync(_invoke)

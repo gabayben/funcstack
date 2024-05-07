@@ -3,11 +3,10 @@ import asyncio
 import inspect
 from typing import Any, AsyncIterator, Callable, Coroutine, Generic, Iterator, Mapping, Sequence, Type, Union, cast, final, get_args
 
-from overrides import typing_utils
 from pydantic import BaseModel
 
 from funcstack.containers import Effect, Effects
-from funcstack.typing import RetryStrategy, StopStrategy, WaitStrategy
+from funcstack.typing import AfterRetryFailure, RetryStrategy, StopStrategy, WaitStrategy
 from funcstack.typing._vars import Args, In, Other, Out
 from funcstack.utils.typing import is_return_type
 from funcstack.utils.serialization import create_model
@@ -76,14 +75,16 @@ class Module(Generic[In, Out], ABC):
         self,
         retry: RetryStrategy | None = None,
         stop: StopStrategy | None = None,
-        wait: WaitStrategy | None = None
+        wait: WaitStrategy | None = None,
+        after: AfterRetryFailure | None = None
     ) -> 'Module[In, Out]':
         from funcstack.modules.fault_handling.retry import Retry
         return Retry(
             bound=self,
             retry=retry,
             stop=stop,
-            wait=wait
+            wait=wait,
+            after=after
         )
 
     def with_fallbacks(
@@ -154,9 +155,7 @@ class Module(Generic[In, Out], ABC):
             return root_type
         return create_model(
             self.get_name(name='Input'),
-            **{
-                'input': (root_type, None)
-            }
+            input=(root_type, None)
         )
 
     def output_schema(self) -> Type[BaseModel]:
@@ -177,9 +176,7 @@ class Module(Generic[In, Out], ABC):
             return root_type
         return create_model(
             self.get_name(name='Output'),
-            **{
-                'output': (root_type, None)
-            }
+            output=(root_type, None)
         )
 
 class Modules:

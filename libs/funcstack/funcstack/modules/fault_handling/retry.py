@@ -4,13 +4,14 @@ from tenacity import AsyncRetrying, retry_if_exception_type, stop_after_attempt,
 
 from funcstack.containers import Effect, Effects
 from funcstack.modules import DecoratorBase, Module
-from funcstack.typing import RetryStrategy, StopStrategy, WaitStrategy
+from funcstack.typing import AfterRetryFailure, RetryStrategy, StopStrategy, WaitStrategy
 from funcstack.typing._vars import In, Out
 
 class Retry(DecoratorBase[In, Out]):
     retry: RetryStrategy
     stop: StopStrategy
     wait: WaitStrategy
+    after: AfterRetryFailure | None
 
     @property
     def _retry_kwargs(self) -> dict[str, Any]:
@@ -18,7 +19,8 @@ class Retry(DecoratorBase[In, Out]):
             'reraise': True,
             'retry': self.retry,
             'stop': self.stop,
-            'wait': self.wait
+            'wait': self.wait,
+            'after': self.after
         }
 
     def __init__(
@@ -26,13 +28,15 @@ class Retry(DecoratorBase[In, Out]):
         bound: Module[In, Out],
         retry: RetryStrategy | None = None,
         stop: StopStrategy | None = None,
-        wait: WaitStrategy | None = None
+        wait: WaitStrategy | None = None,
+        after: AfterRetryFailure | None = None
     ):
         super().__init__(
             bound=bound,
             retry = retry or retry_if_exception_type((Exception,)),
             stop = stop or stop_after_attempt(3),
-            wait = wait or wait_none()
+            wait = wait or wait_none(),
+            after=after
         )
 
     @override

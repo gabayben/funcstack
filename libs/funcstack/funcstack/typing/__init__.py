@@ -16,7 +16,8 @@ from .types import (
     Embedding,
     RetryStrategy,
     StopStrategy,
-    WaitStrategy
+    WaitStrategy,
+    AfterRetryFailure
 )
 
 from .protocols import SupportsKeyIndex

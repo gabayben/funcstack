@@ -33,6 +33,9 @@ class Artifact(BaseDoc, ABC):
     def to_utf8(self) -> str:
         return bytes(self).decode('utf-8')
 
+    def is_empty(self) -> bool:
+        return bytes(self) == b''
+
     class Config:
         extra = True
         arbitrary_types_allowed = True

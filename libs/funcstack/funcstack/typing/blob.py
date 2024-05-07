@@ -1,14 +1,18 @@
 from abc import ABC
-from typing import Optional
+from typing import Generic, Optional, TypeVar, override
 
 from docarray.utils._internal.misc import ProtocolType
 from pydantic import Field
 
-from funcstack.typing import Artifact, AudioBytes, AudioUrl, ImageBytes, ImageUrl, VideoBytes, VideoUrl
+from funcstack.typing import Artifact, AudioBytes, AudioUrl, BaseBytes, BaseUrl, ImageBytes, ImageUrl, VideoBytes, VideoUrl
+
+_Url = TypeVar('_Url', bound=BaseUrl)
+_Bytes = TypeVar('_Bytes', bound=BaseBytes)
 
 class BlobArtifact(Artifact, ABC):
     base64: Optional[str] = Field(default=None, kw_only=True)
 
+    @override
     def to_base64(
         self,
         protocol: ProtocolType = 'protobuf',
@@ -16,17 +20,19 @@ class BlobArtifact(Artifact, ABC):
     ) -> str:
         return self.base64 or super().to_base64(protocol=protocol, compress=compress)
 
-class MediaArtifact(BlobArtifact):
+class MediaArtifact(BlobArtifact, Generic[_Url, _Bytes]):
+    url: _Url = Field(default=None, kw_only=True)
+    bytes_: _Bytes = Field(default=None, kw_only=True)
+
+    @override
+    def to_base64(self, **kwargs) -> str:
+        return super().to_base64(**kwargs)
+
+class ImageArtifact(MediaArtifact[ImageUrl, ImageBytes]):
     pass
 
-class ImageArtifact(MediaArtifact):
-    image_url: Optional[ImageUrl] = Field(alias='url', default=None, kw_only=True)
-    image_bytes: Optional[ImageBytes] = Field(default=None, exclude=True, init=False)
+class VideoArtifact(MediaArtifact[VideoUrl, VideoBytes]):
+    pass
 
-class VideoArtifact(MediaArtifact):
-    video_url: Optional[VideoUrl] = Field(alias='url', default=None, kw_only=True)
-    video_bytes: Optional[VideoBytes] = Field(default=None, exclude=True, init=False)
-
-class AudioArtifact(MediaArtifact):
-    audio_url: Optional[AudioUrl] = Field(alias='url', default=None, kw_only=True)
-    audio_bytes: Optional[AudioBytes] = Field(default=None, exclude=True, init=False)
+class AudioArtifact(MediaArtifact[AudioUrl, AudioBytes]):
+    pass

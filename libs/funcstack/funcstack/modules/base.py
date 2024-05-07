@@ -8,8 +8,7 @@ from pydantic import BaseModel
 from funcstack.containers import Effect, Effects
 from funcstack.typing import AfterRetryFailure, RetryStrategy, StopStrategy, WaitStrategy
 from funcstack.typing._vars import Args, In, Other, Out
-from funcstack.utils.typing import is_return_type
-from funcstack.utils.serialization import create_model
+from funcstack.utils.typing import create_pydantic_model, is_return_type
 
 class Module(Generic[In, Out], ABC):
     name: str | None = None
@@ -19,7 +18,6 @@ class Module(Generic[In, Out], ABC):
         """
         The type of input this module accepts specified as a type annotation.
         """
-        args = get_args(self.__class__)
         for cls in self.__class__.__orig_bases__: # type: ignore[attr-defined]
             type_args = get_args(cls)
             if type_args and len(type_args) == 2:
@@ -150,13 +148,7 @@ class Module(Generic[In, Out], ABC):
         Returns:
             A pydantic model that can be used to validate input.
         """
-        root_type = self.InputType
-        if inspect.isclass(root_type) and issubclass(root_type, BaseModel):
-            return root_type
-        return create_model(
-            self.get_name(name='Input'),
-            input=(root_type, None)
-        )
+        return create_pydantic_model(self.InputType, self.get_name(name='Input'), 'input')
 
     def output_schema(self) -> Type[BaseModel]:
         """
@@ -171,13 +163,7 @@ class Module(Generic[In, Out], ABC):
         Returns:
             A pydantic model that can be used to validate output.
         """
-        root_type = self.OutputType
-        if inspect.isclass(root_type) and issubclass(root_type, BaseModel):
-            return root_type
-        return create_model(
-            self.get_name(name='Output'),
-            output=(root_type, None)
-        )
+        return create_pydantic_model(self.OutputType, self.get_name(name='Output'), 'output')
 
 class Modules:
     @final

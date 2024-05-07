@@ -4,11 +4,13 @@ from typing import Any, Optional, Self
 
 from pydantic import Field
 
-from funcstack.typing import BaseDoc, BaseUrl, TextUrl
+from funcstack.typing import BaseDoc, BaseUrl, Embedding, TextUrl
 
 class Artifact(BaseDoc, ABC):
     name: Optional[str] = None
     metadata: dict[str, Any] = Field(default_factory=dict)
+    embedding: Optional[Embedding] = Field(default=None, exclude=True, kw_only=True)
+    score: Optional[float] = Field(default=None, kw_only=True)
 
     @classmethod
     def from_source(cls, source: 'ArtifactSource') -> Self:

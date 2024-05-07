@@ -28,9 +28,7 @@ class JinjaConverter(PydanticMixin, Module[In, Out]):
         input_type: Type[In] = Any,
         output_type: Type[Out] = Any
     ):
-        super().__init__(template=template)
-        self.input_type = input_type
-        self.output_type = output_type
+        super().__init__(template=template, input_type=input_type, output_type=output_type)
 
     def evaluate(self, context: In, **kwargs) -> Effect[Out]:
         pass

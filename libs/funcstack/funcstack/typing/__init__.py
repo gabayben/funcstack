@@ -25,4 +25,3 @@ from .base import Artifact, ArtifactSource
 from .blob import BlobArtifact, MediaArtifact, ImageArtifact, VideoArtifact, AudioArtifact
 from .byte_stream import ByteStream
 from .text import TextArtifact
-from .document import Document

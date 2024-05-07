@@ -13,7 +13,7 @@ def _create_model_cached(
 ) -> Type[BaseModel]:
     return create_model_base(
         __model_name,
-        __config__=_SchemaConfig(),
+        __config__=_SchemaConfig(extra='allow', arbitrary_types_allowed=True),
         **field_definitions
     )
 
@@ -25,4 +25,8 @@ def create_model(
         return _create_model_cached(__model_name, **field_descriptions)
     except TypeError:
         # something in field definitions is not hashable
-        return create_model_base(__model_name, __config__=_SchemaConfig(), **field_descriptions)
+        return create_model_base(
+            __model_name,
+            __config__=_SchemaConfig(extra='allow', arbitrary_types_allowed=True),
+            **field_descriptions
+        )

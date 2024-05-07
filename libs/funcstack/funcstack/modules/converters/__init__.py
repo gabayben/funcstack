@@ -1,2 +1,2 @@
-from .html_to_document import HtmlToDocument
+from .html_to_text import HtmlToText
 from .jinja import JinjaConverter

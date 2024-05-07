@@ -1,17 +1,21 @@
 from typing import Any, Type, override
 
-from pydantic import BaseModel, Field
+from pydantic import Field
 
 from funcstack.containers import Effect
 from funcstack.mixins import PydanticMixin
 from funcstack.modules import Module
-from funcstack.typing._vars import Out
-from funcstack.utils.serialization import create_model
+from funcstack.typing._vars import In, Out
 
-class JinjaConverter(PydanticMixin, Module[dict[str, Any], Out]):
+class JinjaConverter(PydanticMixin, Module[In, Out]):
     template: str
+    input_type: Type[In] = Field(default=Any)
     output_type: Type[Out] = Field(default=Any)
-    runtime_variables: dict[str, Any]
+
+    @property
+    @override
+    def InputType(self) -> Type[In]:
+        return self.input_type
 
     @property
     @override
@@ -21,21 +25,12 @@ class JinjaConverter(PydanticMixin, Module[dict[str, Any], Out]):
     def __init__(
         self,
         template: str,
-        output_type: Type[Out],
-        **runtime_variables
+        input_type: Type[In] = Any,
+        output_type: Type[Out] = Any
     ):
-        super().__init__(template=template, runtime_variables=runtime_variables)
+        super().__init__(template=template)
+        self.input_type = input_type
         self.output_type = output_type
 
-    def evaluate(self, context: dict[str, Any], **kwargs) -> Effect[Out]:
+    def evaluate(self, context: In, **kwargs) -> Effect[Out]:
         pass
-
-    @override
-    def input_schema(self) -> Type[BaseModel]:
-        return create_model(
-            self.get_name(suffix='Input'),
-            **{
-                k: (v, None)
-                for k, v in self.runtime_variables.items()
-            }
-        )

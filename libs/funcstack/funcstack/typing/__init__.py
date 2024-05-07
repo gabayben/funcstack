@@ -1,4 +1,4 @@
-from .aliases import (
+from .types import (
     BaseDoc,
     DocList,
     DocVec,
@@ -20,7 +20,7 @@ from .aliases import (
 )
 
 from .protocols import SupportsKeyIndex
-from .base import Artifact
+from .base import Artifact, ArtifactSource
 from .blob import BlobArtifact, MediaArtifact, ImageArtifact, VideoArtifact, AudioArtifact
 from .byte_stream import ByteStream
 from .text import TextArtifact

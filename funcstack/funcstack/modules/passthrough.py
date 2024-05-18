@@ -24,5 +24,5 @@ class Passthrough(PydanticMixin, Module[In, In]):
         super().__init__()
         self.passthrough_type = passthrough_type
 
-    def evaluate(self, data: In, **kwargs) -> Effect[In]:
+    def __call__(self, data: In, **kwargs) -> Effect[In]:
         pass

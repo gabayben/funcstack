@@ -8,16 +8,9 @@ authors = ["bengabay <ben@netop.cloud>"]
 python = "^3.12"
 
 [tool.poetry.group.dev.dependencies]
-funcstack = { path = "libs/funcstack/", develop = true }
+funcstack = { path = "funcstack/", develop = true }
 funcflow = { path = "libs/funcflow/", develop = true }
 funcstack-jina = { path = "libs/integrations/jina/", develop = true }
 funcstack-pypdf = { path = "libs/integrations/pypdf/", develop = true }
 funcstack-tika = { path = "libs/integrations/tika/", develop = true }
 notebook = "^7.1.3"
-
-[tool.poetry.group.lint.dependencies]
-funcstack = { path = "libs/funcstack/", develop = true }
-funcflow = { path = "libs/funcflow/", develop = true }
-funcstack-jina = { path = "libs/integrations/jina/", develop = true }
-funcstack-pypdf = { path = "libs/integrations/pypdf/", develop = true }
-funcstack-tika = { path = "libs/integrations/tika/", develop = true }

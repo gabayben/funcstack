@@ -47,8 +47,8 @@ class DecoratorBase(PydanticMixin, Module[In, Out]):
             **fields
         )
 
-    def evaluate(self, data: In, **kwargs) -> Effect[Out]:
-        return self.bound.evaluate(data, **{**self.kwargs, **kwargs})
+    def __call__(self, data: In, **kwargs) -> Effect[Out]:
+        return self.bound.__call__(data, **{**self.kwargs, **kwargs})
 
     @override
     def get_name(

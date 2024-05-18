@@ -2,7 +2,7 @@ from typing import Any, Protocol, Self
 
 from pypdf import PdfReader
 
-from funcstack.typing import TextArtifact
+from funcstack import TextArtifact
 
 class PyPDFConverter(Protocol):
     @classmethod

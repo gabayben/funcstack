@@ -98,24 +98,24 @@ class Module(Generic[In, Out], ABC):
         )
 
     @abstractmethod
-    def evaluate(self, data: In, **kwargs) -> Effect[Out]:
+    def __call__(self, data: In, **kwargs) -> Effect[Out]:
         pass
 
     @final
     def invoke(self, data: In, **kwargs) -> Out:
-        return self.evaluate(data, **kwargs).invoke()
+        return self(data, **kwargs).invoke()
 
     @final
     async def ainvoke(self, data: In, **kwargs) -> Out:
-        return await self.evaluate(data, **kwargs).ainvoke()
+        return await self(data, **kwargs).ainvoke()
 
     @final
     def iter(self, data: In, **kwargs) -> Iterator[Out]:
-        yield from self.evaluate(data, **kwargs).iter()
+        yield from self(data, **kwargs).iter()
 
     @final
     async def aiter(self, data: In, **kwargs) -> AsyncIterator[Out]:
-        async for item in self.evaluate(data, **kwargs).aiter(): #type: ignore
+        async for item in self(data, **kwargs).aiter(): #type: ignore
             yield item
 
     def get_name(
@@ -171,14 +171,14 @@ class Modules:
         def __init__(self, func: Callable[[In, Args.kwargs], Effect[Out]]):
             self.func = func
 
-        def evaluate(self, data: In, **kwargs) -> Effect[Out]:
+        def __call__(self, data: In, **kwargs) -> Effect[Out]:
             return self.func(data, **kwargs)
     @final
     class Sync(Module[In, Out]):
         def __init__(self, func: Callable[[In, Args.kwargs], Out]):
             self.func = func
 
-        def evaluate(self, data: In, **kwargs) -> Effect[Out]:
+        def __call__(self, data: In, **kwargs) -> Effect[Out]:
             def invoke() -> Out:
                 return self.func(data, **kwargs)
             return Effects.Sync(invoke)
@@ -188,7 +188,7 @@ class Modules:
         def __init__(self, func: Callable[[In, Args.kwargs], Coroutine[Any, Any, Out]]):
             self.func = func
 
-        def evaluate(self, data: In, **kwargs) -> Effect[Out]:
+        def __call__(self, data: In, **kwargs) -> Effect[Out]:
             async def ainvoke() -> Coroutine[Any, Any, Out]:
                 return await self.func(data, **kwargs)
             return Effects.Async(ainvoke)
@@ -198,7 +198,7 @@ class Modules:
         def __init__(self, func: Callable[[In, Args.kwargs], Iterator[Out]]):
             self.func = func
 
-        def evaluate(self, data: In, **kwargs) -> Effect[Out]:
+        def __call__(self, data: In, **kwargs) -> Effect[Out]:
             def _iter() -> Iterator[Out]:
                 yield from self.func(data, **kwargs)
             return Effects.Iterator(_iter)
@@ -208,7 +208,7 @@ class Modules:
         def __init__(self, func: Callable[[In, Args.kwargs], AsyncIterator[Out]]):
             self.func = func
 
-        def evaluate(self, data: In, **kwargs) -> Effect[Out]:
+        def __call__(self, data: In, **kwargs) -> Effect[Out]:
             async def _aiter() -> AsyncIterator[Out]:
                 async for item in self.func(data, **kwargs):
                     yield item

@@ -112,11 +112,11 @@ class Sequential(PydanticMixin, Module[In, Out]):
             name=self.name
         )
 
-    def evaluate(self, data: In, **kwargs) -> Effect[Out]:
+    def __call__(self, data: In, **kwargs) -> Effect[Out]:
         try:
-            effect = self.steps[0].evaluate(data, **kwargs)
+            effect = self.steps[0].__call__(data, **kwargs)
             for step in self.steps[1:]:
-                effect = effect.flat_map(lambda out: step.evaluate(out, **kwargs))
+                effect = effect.flat_map(lambda out: step.__call__(out, **kwargs))
         except:
             raise
         else:

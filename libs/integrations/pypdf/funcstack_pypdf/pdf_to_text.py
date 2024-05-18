@@ -6,8 +6,8 @@ from pypdf import PdfReader
 
 from funcstack.containers import Effect, Effects
 from funcstack.mixins import PydanticMixin
-from funcstack.modules import Module
-from funcstack.typing import ArtifactSource, ByteStream, TextArtifact
+from funcstack import Module
+from funcstack import ArtifactSource, ByteStream, TextArtifact
 from funcstack.utils.dicts import normalize_metadata
 from funcstack.utils.func import zip2
 from funcstack_pypdf import PyPDFConverter

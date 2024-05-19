@@ -97,6 +97,9 @@ class Module(Generic[In, Out], ABC):
             exceptions_to_handle=exceptions_to_handle
         )
 
+    def map(self, cb: Callable[[Out], Other]) -> 'Module[In, Other]':
+        return self | coerce_to_module(cb)
+
     @abstractmethod
     def forward(self, data: In, **kwargs) -> Effect[Out]:
         pass

@@ -41,7 +41,7 @@ class HtmlToText(PydanticMixin, Module[list[ArtifactSource], list[TextArtifact]]
         self.extractor_type = extractor_type
         self.try_others = try_others
 
-    def __call__(
+    def effect(
         self,
         sources: list[ArtifactSource],
         metadata: dict[str, Any] | list[dict[str, Any]] | None = None

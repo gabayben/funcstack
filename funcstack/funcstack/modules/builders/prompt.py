@@ -19,7 +19,7 @@ class PromptBuilder(PydanticMixin, Module[dict[str, Any], str]):
         template_variables = meta.find_undeclared_variables(ast)
         self.context_variables = {v: (Any, None) for v in template_variables}
 
-    def __call__(self, data: dict[str, Any], **kwargs) -> Effect[str]:
+    def effect(self, data: dict[str, Any], **kwargs) -> Effect[str]:
         def _invoke() -> str:
             missing_variables = [var for var in self.required_variables if var not in data]
             if missing_variables:

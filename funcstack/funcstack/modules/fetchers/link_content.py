@@ -82,7 +82,7 @@ class LinkContentFetcher(PydanticMixin, Module[list[str], list[ByteStream]]):
         logger.warning('LinkContentFetcher already implements retry behavior. Call to with_retry(...) is ignored.')
         return self
 
-    def __call__(self, urls: list[str], **kwargs) -> Effect[list[ByteStream]]:
+    def effect(self, urls: list[str], **kwargs) -> Effect[list[ByteStream]]:
         def _invoke() -> list[ByteStream]:
             streams: list[ByteStream] = []
 

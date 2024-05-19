@@ -33,7 +33,7 @@ class Parallel(PydanticMixin, Module[In, dict[str, Any]]):
         )
         return '{\n  ' + map_for_repr + '\n}'
 
-    def effect(self, data: In, **kwargs) -> Effect[dict[str, Any]]:
+    def forward(self, data: In, **kwargs) -> Effect[dict[str, Any]]:
         async def _ainvoke() -> dict[str, Any]:
             try:
                 steps = dict(self.steps)

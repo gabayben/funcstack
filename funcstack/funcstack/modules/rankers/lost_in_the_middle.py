@@ -4,7 +4,7 @@ from funcstack.containers import Effect
 from funcstack.modules import Module
 
 class LostInTheMiddleRanker(Module[list[Artifact], list[Artifact]]):
-    def effect(
+    def forward(
         self,
         data: list[Artifact],
         top_k: int = 10

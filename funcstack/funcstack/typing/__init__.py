@@ -21,7 +21,8 @@ from .types import (
 )
 
 from .protocols import SupportsKeyIndex
-from .base import Artifact, ArtifactSource
+from .serializable import Serializable
+from .artifact import Artifact, Utf8Artifact, ArtifactSource
 from .blob import BlobArtifact, MediaArtifact, ImageArtifact, VideoArtifact, AudioArtifact
 from .byte_stream import ByteStream
 from .text import TextArtifact

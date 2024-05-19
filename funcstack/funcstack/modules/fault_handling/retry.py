@@ -40,7 +40,7 @@ class Retry(DecoratorBase[In, Out]):
         )
 
     @override
-    def effect(self, data: In, **kwargs) -> Effect[Out]:
+    def forward(self, data: In, **kwargs) -> Effect[Out]:
         async def _ainvoke() -> Out:
             async for attempt in AsyncRetrying(**self._retry_kwargs):
                 with attempt:

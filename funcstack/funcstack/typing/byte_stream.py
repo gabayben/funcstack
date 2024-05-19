@@ -1,26 +1,23 @@
-from typing import Self, Type, override
-
-from docarray.base_doc.mixins.io import T
+from typing import Self, override
 
 from funcstack.typing import Artifact
 
 class ByteStream(Artifact):
     bytes_: bytes
-    content_type: str
 
-    def __init__(self, bytes_: bytes, content_type: str = '', **kwargs):
-        super().__init__(**kwargs, bytes_=bytes_, content_type=content_type)
+    def __init__(self, bytes_: bytes, mime_type: str | None = None, **kwargs):
+        super().__init__(**kwargs, bytes_=bytes_, _mime_type=mime_type)
 
     @classmethod
-    def from_text(cls, text: str, content_type: str = '') -> Self:
-        return cls(bytes(text, 'utf-8'), content_type=content_type)
+    def from_text(cls, text: str, mime_type: str | None = 'llm/plain', **kwargs) -> Self:
+        return cls(bytes(text, 'utf-8'), _mime_type=mime_type, **kwargs)
 
     @classmethod
     def from_bytes(
-        cls: Type[T],
+        cls,
         data: bytes,
         **kwargs
-    ) -> 'ByteStream':
+    ) -> Self:
         return ByteStream(data)
 
     @override

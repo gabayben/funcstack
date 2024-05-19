@@ -26,7 +26,7 @@ class Fallbacks(DecoratorBase[In, Out]):
         )
 
     @override
-    def effect(self, data: In, **kwargs) -> Effect[Out]:
+    def forward(self, data: In, **kwargs) -> Effect[Out]:
         async def _ainvoke() -> Out:
             first_error: BaseException | None = None
             last_error: BaseException | None = None

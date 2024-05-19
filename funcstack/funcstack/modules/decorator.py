@@ -47,8 +47,8 @@ class DecoratorBase(PydanticMixin, Module[In, Out]):
             **fields
         )
 
-    def effect(self, data: In, **kwargs) -> Effect[Out]:
-        return self.bound.effect(data, **{**self.kwargs, **kwargs})
+    def forward(self, data: In, **kwargs) -> Effect[Out]:
+        return self.bound.forward(data, **{**self.kwargs, **kwargs})
 
     @override
     def get_name(

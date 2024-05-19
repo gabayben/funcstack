@@ -28,7 +28,7 @@ class JinjaConverter(PydanticMixin, Module[Any, Out]):
         template_variables = meta.find_undeclared_variables(ast)
         self.context_variables = {v: (Any, None) for v in template_variables}
 
-    def effect(self, context: Any, **kwargs) -> Effect[Out]:
+    def forward(self, context: Any, **kwargs) -> Effect[Out]:
         def _invoke() -> Out:
             return cast(Out, self.template.render(context))
         return Effects.Sync(_invoke)
